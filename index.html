@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PNGInfo Playground</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: auto;
+      }
+      img {
+        height: 768px;
+      }
+      pre {
+        padding: 1rem;
+        max-width: 100vw;
+        word-break: break-all;
+        white-space: pre-wrap;
+      }
+    </style>
+    <script type="importmap">
+      {
+        "imports": {
+          "@stable-canvas/sd-webui-a1111-pnginfo": "./dist/main.module.mjs"
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <p>drop any image on the page.</p>
+    <img />
+    <pre></pre>
+    <button>refresh</button>
+
+    <script type="module">
+      import { PNGInfo } from "@stable-canvas/sd-webui-a1111-pnginfo";
+
+      const $image = document.querySelector("img");
+      const $data = document.querySelector("pre");
+      const $btn = document.querySelector("button");
+
+      const update = async () => {
+        const pnginfo = new PNGInfo($image);
+        const params = await pnginfo.getParams();
+        console.log(params);
+        $data.innerText = JSON.stringify(params, null, 2);
+      };
+
+      document.body.addEventListener("drop", async (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const files = event.dataTransfer.files;
+        const image0 = Array.from(files).find((x) =>
+          x.type.startsWith("image/")
+        );
+        const reader = new FileReader();
+        reader.readAsDataURL(image0);
+        reader.onload = async (e) => {
+          $image.src = e.target.result;
+          update();
+        };
+      });
+
+      $btn.addEventListener("click", async () => {
+        update();
+      });
+    </script>
+  </body>
+</html>
