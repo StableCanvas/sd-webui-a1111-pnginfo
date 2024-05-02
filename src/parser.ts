@@ -13,7 +13,9 @@ returns a dict with field values
 
 NOTE: code from: modules\generation_parameters_copypaste.py
  */
-export function parseGenerationParameters(x: string): GenerationParameters {
+export function parseGenerationParameters(
+  input_raw_str: string
+): GenerationParameters {
   const result_params: GenerationParameters = {
     "Clip skip": "1",
     "Hires resize-1": 0,
@@ -34,11 +36,11 @@ export function parseGenerationParameters(x: string): GenerationParameters {
   let negativePrompt = "";
   let doneWithPrompt = false;
 
-  const lines = x.trim().split("\n");
+  const lines = input_raw_str.trim().split("\n");
   let lastLine = lines.pop() || "";
 
   const reParam: RegExp =
-    /\s*(\w[\w \-/]+):\s*("(?:\\.|[^\\"])+"|[^,]*)(?:,|$)/g;
+    /\s*(\w[\w \-/]+):\s*("(?:\\.|[^\\"])+"||\{[^\n]+?\}|[^,]*)(?:,|$)/g;
   const reImageSize: RegExp = /^(\d+)x(\d+)$/g;
 
   if (reParam.test(lastLine) === false) {
