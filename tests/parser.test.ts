@@ -36,6 +36,7 @@ describe("Params Parser", () => {
       "Size-2": "512",
       "VAE Decoder": "Full",
       "VAE Encoder": "Full",
+      Steps: "20",
     });
   });
 
@@ -83,6 +84,7 @@ describe("Params Parser", () => {
       "VAE Decoder": "Full",
       "VAE Encoder": "Full",
       Version: "v1.5.1",
+      Steps: "21",
     });
   });
 });

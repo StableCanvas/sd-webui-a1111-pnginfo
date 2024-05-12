@@ -48,6 +48,9 @@ export function parseGenerationParameters(
     lastLine = "";
   }
 
+  // Reset the regex
+  reParam.lastIndex = 0;
+
   for (let line of lines) {
     line = line.trim();
     if (line.startsWith("Negative prompt:")) {
